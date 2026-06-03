@@ -7,780 +7,807 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; overflow: hidden; }
-
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, #0a0e27 0%, #141b3d 40%, #1a1f4a 100%);
+      background: linear-gradient(135deg, #060b1e 0%, #0f1638 50%, #141b4a 100%);
       color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 16px;
-      position: relative;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 20%, rgba(79, 140, 255, 0.08) 0%, transparent 50%),
-                  radial-gradient(circle at 70% 80%, rgba(124, 92, 252, 0.06) 0%, transparent 50%);
-      animation: bgDrift 20s ease-in-out infinite alternate;
-      z-index: 0;
-      pointer-events: none;
+    /* ===== PARTICLES ===== */
+    #particles {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      overflow: hidden;
     }
-
-    @keyframes bgDrift {
-      0% { transform: translate(0, 0) rotate(0deg); }
-      100% { transform: translate(-5%, -5%) rotate(3deg); }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+      animation: floatParticle linear infinite;
     }
-
-    /* ===== CONTAINER ===== */
-    .container {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 640px;
-      min-height: 520px;
+    @keyframes floatParticle {
+      0% { transform: translateY(100vh) rotate(0deg) scale(1); opacity: 0; }
+      10% { opacity: 0.2; }
+      90% { opacity: 0.2; }
+      100% { transform: translateY(-10vh) rotate(720deg) scale(0.5); opacity: 0; }
     }
 
     /* ===== PAGES ===== */
     .page {
+      position: fixed; inset: 0;
       display: none;
-      animation: fadeSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      padding: 20px;
     }
-    .page.active { display: block; }
-
-    @keyframes fadeSlideIn {
-      0% { opacity: 0; transform: translateY(24px) scale(0.97); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    @keyframes fadeOut {
-      0% { opacity: 1; transform: translateY(0) scale(1); }
-      100% { opacity: 0; transform: translateY(-16px) scale(0.97); }
+    .page.active {
+      display: flex;
+      animation: pageIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     .page.exit {
-      display: block;
-      animation: fadeOut 0.25s ease forwards;
+      display: flex;
+      animation: pageOut 0.3s ease forwards;
+    }
+    @keyframes pageIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes pageOut {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.92); }
     }
 
-    /* ===== GLASS CARD ===== */
-    .glass {
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 36px 32px;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+    /* ===== MUSIC TOGGLE ===== */
+    #music-toggle {
+      position: fixed; top: 16px; right: 16px; z-index: 100;
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.6);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #music-toggle:hover {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      transform: scale(1.1);
     }
 
     /* ===== COVER PAGE ===== */
-    #page-cover { text-align: center; }
-    .cover-icon {
-      font-size: 64px;
+    #page-cover { flex-direction: column; text-align: center; gap: 16px; }
+    .cover-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 20px;
+      background: rgba(79,140,255,0.15);
+      border: 1px solid rgba(79,140,255,0.25);
+      color: #4f8cff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
       margin-bottom: 8px;
+      animation: fadeSlideUp 0.6s 0.1s both;
+    }
+    .cover-icon {
+      font-size: clamp(3.5rem, 10vw, 6rem);
       display: block;
-      animation: floatIcon 3s ease-in-out infinite;
+      margin-bottom: 4px;
+      animation: floatIcon 3s ease-in-out infinite, fadeSlideUp 0.6s 0s both;
+      filter: drop-shadow(0 0 30px rgba(79,140,255,0.3));
     }
     @keyframes floatIcon {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-12px); }
     }
     .cover-title {
-      font-size: 2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #4f8cff, #7c5cfc);
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #4f8cff 0%, #00d4ff 40%, #9b5cfc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 12px;
-      letter-spacing: -0.5px;
+      text-shadow: none;
+      filter: drop-shadow(0 0 40px rgba(79,140,255,0.25));
+      animation: fadeSlideUp 0.6s 0.15s both;
+      max-width: 700px;
     }
-    .cover-sub {
-      color: rgba(255,255,255,0.6);
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 32px;
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
+    .cover-title .sub {
+      display: block;
+      font-size: 0.45em;
+      -webkit-text-fill-color: rgba(255,255,255,0.5);
+      background: none;
+      font-weight: 500;
+      margin-top: 4px;
+      letter-spacing: 2px;
+    }
+    .cover-desc {
+      font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+      color: rgba(255,255,255,0.5);
+      max-width: 480px;
+      line-height: 1.7;
+      animation: fadeSlideUp 0.6s 0.25s both;
     }
     .cover-stats {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-bottom: 32px;
+      display: flex; gap: 20px;
+      animation: fadeSlideUp 0.6s 0.35s both;
     }
     .cover-stat {
-      text-align: center;
-    }
-    .cover-stat .num {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #4f8cff;
-    }
-    .cover-stat .label {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.5);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* ===== BUTTONS ===== */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 14px 36px;
-      font-size: 1rem;
-      font-weight: 600;
-      border: none;
+      padding: 12px 20px;
       border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.25s ease;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      min-width: 90px;
+    }
+    .cover-stat .num { font-size: 1.5rem; font-weight: 800; color: #4f8cff; }
+    .cover-stat .label { font-size: 0.7rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+    .btn-play {
       position: relative;
-      overflow: hidden;
-      text-decoration: none;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #4f8cff, #7c5cfc);
+      padding: 16px 56px;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-weight: 800;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #4f8cff, #00d4ff);
       color: #fff;
-      box-shadow: 0 4px 20px rgba(79, 140, 255, 0.35);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 0 30px rgba(79,140,255,0.3), 0 8px 32px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      animation: fadeSlideUp 0.6s 0.45s both, glowPulse 2s ease-in-out infinite;
     }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 28px rgba(79, 140, 255, 0.5);
+    .btn-play:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 50px rgba(79,140,255,0.5), 0 8px 32px rgba(0,0,0,0.3);
     }
-    .btn-primary:active { transform: translateY(0); }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.06);
-      color: rgba(255,255,255,0.8);
-      border: 1px solid rgba(255,255,255,0.1);
+    .btn-play:active { transform: scale(0.97); }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 30px rgba(79,140,255,0.3), 0 8px 32px rgba(0,0,0,0.3); }
+      50% { box-shadow: 0 0 50px rgba(79,140,255,0.5), 0 0 80px rgba(0,212,255,0.2), 0 8px 32px rgba(0,0,0,0.3); }
     }
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .btn-success {
-      background: linear-gradient(135deg, #00d68f, #00b884);
-      color: #fff;
-      box-shadow: 0 4px 20px rgba(0, 214, 143, 0.3);
-    }
-    .btn-success:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 28px rgba(0, 214, 143, 0.45);
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
-    .btn-danger {
-      background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
-      color: #fff;
+    /* ===== HUD ===== */
+    .hud {
+      position: absolute; top: 20px; left: 20px; right: 20px;
+      display: flex; align-items: center; gap: 12px;
+      animation: fadeSlideUp 0.4s 0s both;
     }
-
-    .btn-group {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .hud-stage {
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: rgba(79,140,255,0.15);
+      border: 1px solid rgba(79,140,255,0.2);
+      font-size: 0.7rem; font-weight: 700;
+      color: #4f8cff;
+      letter-spacing: 1px;
+      white-space: nowrap;
     }
-
-    /* ===== PROGRESS BAR ===== */
-    .progress-wrapper {
-      margin-bottom: 28px;
+    .hud-progress {
+      flex: 1; display: flex; gap: 4px;
     }
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 0.8rem;
-    }
-    .progress-label {
-      color: rgba(255,255,255,0.5);
-      font-weight: 500;
-    }
-    .progress-count {
-      color: rgba(255,255,255,0.7);
-      font-weight: 600;
-    }
-    .progress-track {
-      height: 4px;
+    .hud-progress .seg {
+      flex: 1; height: 6px;
+      border-radius: 4px;
       background: rgba(255,255,255,0.08);
-      border-radius: 4px;
-      overflow: hidden;
+      transition: all 0.4s ease;
     }
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #4f8cff, #7c5cfc);
-      border-radius: 4px;
-      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    .hud-progress .seg.filled {
+      background: linear-gradient(90deg, #4f8cff, #00d4ff);
+      box-shadow: 0 0 8px rgba(79,140,255,0.4);
     }
+    .hud-progress .seg.filled-glow {
+      background: linear-gradient(90deg, #4f8cff, #00d4ff);
+      box-shadow: 0 0 12px rgba(79,140,255,0.6);
+    }
+    .hud-right {
+      display: flex; align-items: center; gap: 14px;
+      white-space: nowrap;
+    }
+    .hud-stat {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 0.8rem; font-weight: 700;
+    }
+    .hud-stat .icon { font-size: 1rem; }
+    .hud-stat .val { color: #ffd700; }
+    .hud-stat .val.score-val { color: #4f8cff; }
 
     /* ===== QUESTION ===== */
-    .question-number {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #4f8cff;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-      padding: 4px 12px;
-      background: rgba(79, 140, 255, 0.1);
+    .quiz-content {
+      width: 100%; max-width: 800px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 20px;
+    }
+    .q-badge {
+      padding: 6px 18px;
       border-radius: 20px;
+      background: rgba(79,140,255,0.12);
+      font-size: 0.7rem; font-weight: 700;
+      color: #4f8cff;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
-    .question-text {
-      font-size: 1.2rem;
-      font-weight: 600;
-      line-height: 1.5;
-      margin-bottom: 28px;
+    .q-text {
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.4;
       color: rgba(255,255,255,0.95);
+      max-width: 700px;
     }
-
-    /* ===== OPTIONS ===== */
     .options-grid {
       display: grid;
-      gap: 10px;
-    }
-    .option-btn {
-      display: flex;
-      align-items: center;
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
-      width: 100%;
-      padding: 14px 18px;
+      width: 100%; max-width: 700px;
+    }
+    .opt-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px;
       background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
       color: rgba(255,255,255,0.85);
-      font-size: 0.92rem;
-      font-weight: 500;
+      font-size: clamp(0.85rem, 1.5vw, 1rem);
+      font-weight: 600;
       text-align: left;
       cursor: pointer;
       transition: all 0.2s ease;
+      animation: optIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
-    .option-btn:hover:not(.disabled) {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(79, 140, 255, 0.3);
-      transform: translateX(4px);
-    }
-    .option-btn .letter {
+    .opt-btn .letter {
       flex-shrink: 0;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px;
       background: rgba(255,255,255,0.06);
-      font-weight: 700;
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.4);
+      font-weight: 800; font-size: 0.85rem;
+      color: rgba(255,255,255,0.3);
       transition: all 0.2s ease;
     }
-    .option-btn:hover:not(.disabled) .letter {
-      background: rgba(79, 140, 255, 0.15);
+    .opt-btn:hover:not(.disabled) {
+      border-color: rgba(79,140,255,0.4);
+      background: rgba(79,140,255,0.08);
+      transform: scale(1.02);
+      box-shadow: 0 0 25px rgba(79,140,255,0.15);
+    }
+    .opt-btn:hover:not(.disabled) .letter {
+      background: rgba(79,140,255,0.2);
       color: #4f8cff;
     }
-
-    .option-btn.selected {
-      border-color: #4f8cff;
-      background: rgba(79, 140, 255, 0.1);
+    .opt-btn.correct {
+      border-color: #00ff88 !important;
+      background: rgba(0,255,136,0.1) !important;
+      box-shadow: 0 0 30px rgba(0,255,136,0.2) !important;
     }
-    .option-btn.selected .letter {
-      background: #4f8cff;
-      color: #fff;
+    .opt-btn.correct .letter {
+      background: #00ff88 !important;
+      color: #060b1e !important;
     }
-
-    .option-btn.correct {
-      border-color: #00d68f !important;
-      background: rgba(0, 214, 143, 0.12) !important;
+    .opt-btn.wrong {
+      border-color: #ff4757 !important;
+      background: rgba(255,71,87,0.1) !important;
+      box-shadow: 0 0 30px rgba(255,71,87,0.2) !important;
+      animation: shake 0.4s ease !important;
     }
-    .option-btn.correct .letter {
-      background: #00d68f !important;
+    .opt-btn.wrong .letter {
+      background: #ff4757 !important;
       color: #fff !important;
     }
-    .option-btn.wrong {
-      border-color: #ff6b6b !important;
-      background: rgba(255, 107, 107, 0.12) !important;
+    .opt-btn.disabled { cursor: default; opacity: 0.5; }
+    .opt-btn.correct.disabled, .opt-btn.wrong.disabled { opacity: 1; }
+
+    @keyframes optIn {
+      0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
-    .option-btn.wrong .letter {
-      background: #ff6b6b !important;
-      color: #fff !important;
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
     }
-    .option-btn.disabled {
-      cursor: default;
-      opacity: 0.5;
+
+    /* ===== SCORE FLY ===== */
+    .score-fly {
+      position: fixed; z-index: 50;
+      font-size: 1.8rem; font-weight: 900;
+      pointer-events: none;
+      animation: scoreFly 1s ease-out forwards;
     }
-    .option-btn.correct.disabled,
-    .option-btn.wrong.disabled {
-      opacity: 1;
+    .score-fly.plus { color: #00ff88; }
+    .score-fly.streak { color: #ffd700; }
+    .score-fly.minus { color: #ff4757; }
+    @keyframes scoreFly {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-80px) scale(1.5); }
     }
 
     /* ===== ANSWER RESULT ===== */
-    .result-badge {
-      text-align: center;
-      margin-bottom: 20px;
+    #page-result { flex-direction: column; }
+    .result-inner {
+      width: 100%; max-width: 600px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 16px;
     }
-    .result-icon {
-      font-size: 56px;
-      display: block;
-      margin-bottom: 8px;
-      animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    .result-icon-big {
+      font-size: clamp(4rem, 12vw, 7rem);
+      animation: popBounce 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+      filter: drop-shadow(0 0 40px currentColor);
     }
-    @keyframes popIn {
-      0% { transform: scale(0); opacity: 0; }
-      60% { transform: scale(1.2); }
-      100% { transform: scale(1); opacity: 1; }
+    .result-icon-big.correct { color: #00ff88; }
+    .result-icon-big.wrong { color: #ff4757; }
+    @keyframes popBounce {
+      0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+      60% { transform: scale(1.2) rotate(5deg); }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
     }
-    .result-status {
-      font-size: 1.3rem;
-      font-weight: 700;
-    }
-    .result-status.correct-text { color: #00d68f; }
-    .result-status.wrong-text { color: #ff6b6b; }
-
-    .result-detail {
-      margin-bottom: 12px;
-    }
-    .result-label {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.4);
+    .result-status-big {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
+      letter-spacing: 3px;
     }
-    .result-answer {
+    .result-status-big.correct-text { color: #00ff88; text-shadow: 0 0 40px rgba(0,255,136,0.3); }
+    .result-status-big.wrong-text { color: #ff4757; text-shadow: 0 0 40px rgba(255,71,87,0.3); }
+    .result-answer-box {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(0,255,136,0.06);
+      border: 1px solid rgba(0,255,136,0.15);
       font-size: 1rem;
       font-weight: 600;
-      color: rgba(255,255,255,0.9);
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.04);
+      color: #00ff88;
+      text-align: center;
     }
-    .result-answer.correct-ans { color: #00d68f; }
-
-    .insight-box {
-      background: rgba(79, 140, 255, 0.06);
-      border-left: 3px solid #4f8cff;
-      padding: 14px 16px;
-      border-radius: 0 10px 10px 0;
-      margin-bottom: 24px;
+    .result-insight-box {
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: rgba(79,140,255,0.06);
+      border-left: 4px solid #4f8cff;
     }
-    .insight-box .insight-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #4f8cff;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
+    .result-insight-box .label {
+      font-size: 0.65rem; font-weight: 700;
+      color: #4f8cff; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 6px;
     }
-    .insight-box .insight-text {
-      font-size: 0.88rem;
-      line-height: 1.65;
-      color: rgba(255,255,255,0.8);
+    .result-insight-box .text {
+      font-size: 0.9rem; line-height: 1.6;
+      color: rgba(255,255,255,0.75);
     }
-    .insight-box .insight-source {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.35);
+    .result-insight-box .source {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.3);
       margin-top: 8px;
       font-style: italic;
     }
+    .btn-next {
+      width: 100%; max-width: 400px;
+      padding: 16px;
+      font-size: 1.1rem; font-weight: 800;
+      border: none; border-radius: 14px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #4f8cff, #00d4ff);
+      color: #fff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      box-shadow: 0 0 30px rgba(79,140,255,0.25);
+      transition: all 0.3s ease;
+    }
+    .btn-next:hover { transform: scale(1.04); box-shadow: 0 0 50px rgba(79,140,255,0.4); }
+    .btn-next:active { transform: scale(0.96); }
+
+    /* ===== CONFETTI ===== */
+    .confetti-container {
+      position: fixed; inset: 0; pointer-events: none; z-index: 60;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute; top: -10px;
+      width: 8px; height: 8px;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
 
     /* ===== FINAL RESULT ===== */
-    .final-center { text-align: center; }
-    .final-icon {
-      font-size: 64px;
-      display: block;
-      margin-bottom: 12px;
-      animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    #page-final { flex-direction: column; }
+    .final-inner {
+      width: 100%; max-width: 520px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px;
     }
-    .final-score {
-      margin: 20px 0 8px;
+    .final- trophy {
+      font-size: clamp(3rem, 10vw, 5rem);
+      animation: popBounce 0.6s 0.1s both;
     }
-    .score-circle {
-      width: 120px;
-      height: 120px;
+    .final-title {
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.7);
+    }
+    .score-ring {
+      position: relative;
+      width: clamp(120px, 25vw, 160px);
+      height: clamp(120px, 25vw, 160px);
       border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       flex-direction: column;
       background: conic-gradient(#4f8cff var(--pct), rgba(255,255,255,0.06) 0%);
-      position: relative;
+      margin: 4px 0;
     }
-    .score-circle::before {
-      content: '';
-      position: absolute;
-      inset: 6px;
-      border-radius: 50%;
-      background: #0a0e27;
+    .score-ring::before {
+      content: ''; position: absolute;
+      inset: 8px; border-radius: 50%;
+      background: #060b1e;
     }
-    .score-circle .score-num,
-    .score-circle .score-pct {
-      position: relative;
-      z-index: 1;
+    .score-ring .num, .score-ring .pct { position: relative; z-index: 1; }
+    .score-ring .num {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 900;
     }
-    .score-circle .score-num {
-      font-size: 1.6rem;
-      font-weight: 800;
+    .score-ring .pct {
+      font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+      color: rgba(255,255,255,0.4);
     }
-    .score-circle .score-pct {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.5);
-      margin-top: 2px;
+    .final-grade {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      text-shadow: 0 0 40px currentColor;
     }
-    .final-score-label {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.5);
-      margin-top: 8px;
+    .final-grade.s-rank { color: #ffd700; }
+    .final-grade.a-rank { color: #00ff88; }
+    .final-grade.b-rank { color: #4f8cff; }
+    .final-grade.c-rank { color: #9b5cfc; }
+    .final-grade.d-rank { color: #ff4757; }
+
+    .final-stars {
+      font-size: 1.4rem;
+      letter-spacing: 4px;
     }
     .final-message {
-      font-size: 1.1rem;
+      font-size: clamp(0.95rem, 2vw, 1.1rem);
       font-weight: 600;
-      margin: 16px 0 24px;
+      text-align: center;
       padding: 12px 16px;
       border-radius: 12px;
       background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.8);
+      line-height: 1.5;
     }
     .final-detail {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 24px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+      line-height: 1.6;
     }
+    .final-buttons {
+      display: flex; gap: 12px; width: 100%; max-width: 400px;
+    }
+    .final-buttons .btn {
+      flex: 1; padding: 14px; border-radius: 12px;
+      border: none; font-size: 0.9rem; font-weight: 700;
+      cursor: pointer; text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.25s ease;
+    }
+    .final-buttons .btn:hover { transform: scale(1.04); }
+    .final-buttons .btn:active { transform: scale(0.96); }
+    .btn-home {
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .btn-home:hover { background: rgba(255,255,255,0.1); }
+    .btn-retry {
+      background: linear-gradient(135deg, #4f8cff, #00d4ff);
+      color: #fff;
+      box-shadow: 0 0 25px rgba(79,140,255,0.25);
+    }
+    .btn-retry:hover { box-shadow: 0 0 40px rgba(79,140,255,0.4); }
 
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 480px) {
-      .glass { padding: 24px 18px; }
-      .cover-title { font-size: 1.5rem; }
-      .question-text { font-size: 1rem; }
-      .option-btn { padding: 12px 14px; font-size: 0.85rem; }
-      .cover-stats { gap: 16px; }
-      .btn { padding: 12px 24px; font-size: 0.9rem; }
-      .score-circle { width: 100px; height: 100px; }
-      .score-circle .score-num { font-size: 1.3rem; }
-      .container { min-height: 440px; }
+    @media (max-width: 640px) {
+      .options-grid { grid-template-columns: 1fr; gap: 10px; }
+      .hud { top: 12px; left: 12px; right: 12px; gap: 8px; flex-wrap: wrap; }
+      .hud-stage { font-size: 0.6rem; padding: 4px 10px; }
+      .hud-stat { font-size: 0.7rem; }
+      .opt-btn { padding: 12px 14px; }
+      .opt-btn .letter { width: 30px; height: 30px; font-size: 0.75rem; }
+      .cover-stat { min-width: 70px; padding: 10px 14px; }
+      .cover-stat .num { font-size: 1.2rem; }
+      .final-buttons { flex-direction: column; gap: 8px; }
+      .q-text { font-size: 1.1rem; }
     }
-
-    @media (max-width: 360px) {
-      .glass { padding: 18px 14px; border-radius: 14px; }
-      .btn-group { flex-direction: column; }
-      .btn-group .btn { width: 100%; }
+    @media (max-width: 400px) {
+      .page { padding: 12px; }
+      .hud-right { gap: 8px; }
+      .cover-stats { gap: 10px; flex-wrap: wrap; justify-content: center; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
 
-    <!-- ============ COVER PAGE ============ -->
-    <div id="page-cover" class="page active">
-      <div class="glass">
-        <span class="cover-icon">🏗️</span>
-        <h1 class="cover-title">Quiz Infrastruktur Indonesia</h1>
-        <p class="cover-sub">
-          Uji pengetahuan Anda seputar investasi infrastruktur di Indonesia,
-          IPFO, dan pembangunan nasional. 10 pertanyaan menarik untuk dijawab!
-        </p>
-        <div class="cover-stats">
-          <div class="cover-stat">
-            <div class="num">10</div>
-            <div class="label">Pertanyaan</div>
-          </div>
-          <div class="cover-stat">
-            <div class="num">~5</div>
-            <div class="label">Menit</div>
-          </div>
-          <div class="cover-stat">
-            <div class="num">🏆</div>
-            <div class="label">Skor Akhir</div>
-          </div>
-        </div>
-        <button class="btn btn-primary" onclick="startQuiz()">
-          Mulai Quiz →
-        </button>
+  <div id="particles"></div>
+  <button id="music-toggle" onclick="toggleMusic()" title="Musik latar">🔊</button>
+
+  <!-- ===== COVER ===== -->
+  <div id="page-cover" class="page active">
+    <span class="cover-badge">🎮 Quiz Interaktif</span>
+    <span class="cover-icon">🏗️</span>
+    <h1 class="cover-title">
+      Quiz Infrastruktur<br>Indonesia
+      <span class="sub">Uji Wawasan Investasi Infrastruktur Nusantara</span>
+    </h1>
+    <p class="cover-desc">
+      10 pertanyaan tentang IPFO, PPP, dan pembangunan infrastruktur Indonesia.
+      Buktikan pengetahuan Anda!
+    </p>
+    <div class="cover-stats">
+      <div class="cover-stat"><div class="num">10</div><div class="label">Soal</div></div>
+      <div class="cover-stat"><div class="num">⏱️</div><div class="label">~5 Menit</div></div>
+      <div class="cover-stat"><div class="num">🏆</div><div class="label">Skor</div></div>
+    </div>
+    <button class="btn-play" onclick="startQuiz()">Mulai Quiz</button>
+  </div>
+
+  <!-- ===== QUESTION ===== -->
+  <div id="page-question" class="page">
+    <div class="hud">
+      <div class="hud-stage" id="hud-stage">STAGE 1/10</div>
+      <div class="hud-progress" id="hud-progress"></div>
+      <div class="hud-right">
+        <div class="hud-stat"><span class="icon">⭐</span><span class="val score-val" id="hud-score">0</span></div>
+        <div class="hud-stat"><span class="icon">🔥</span><span class="val" id="hud-streak">0</span></div>
       </div>
     </div>
+    <div class="quiz-content">
+      <div class="q-badge" id="q-badge">PERTANYAAN 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options-grid" id="q-options"></div>
+    </div>
+  </div>
 
-    <!-- ============ QUESTION PAGE ============ -->
-    <div id="page-question" class="page">
-      <div class="glass">
-        <div class="progress-wrapper">
-          <div class="progress-header">
-            <span class="progress-label">Progress</span>
-            <span class="progress-count" id="progress-text">1 / 10</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="progress-fill"></div>
-          </div>
-        </div>
-        <div class="question-number" id="q-number">SOAL 1</div>
-        <div class="question-text" id="q-text"></div>
-        <div class="options-grid" id="q-options"></div>
+  <!-- ===== ANSWER RESULT ===== -->
+  <div id="page-result" class="page">
+    <div class="result-inner">
+      <div class="result-icon-big" id="result-icon-big">✅</div>
+      <div class="result-status-big" id="result-status-big">BENAR!</div>
+      <div class="result-answer-box" id="result-answer-box"></div>
+      <div class="result-insight-box">
+        <div class="label">💡 Insight</div>
+        <div class="text" id="result-insight-text"></div>
+        <div class="source" id="result-insight-source"></div>
+      </div>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Lanjut →</button>
+    </div>
+  </div>
+
+  <!-- ===== FINAL RESULT ===== -->
+  <div id="page-final" class="page">
+    <div class="final-inner">
+      <div class="final- trophy" id="final-trophy">🏆</div>
+      <div class="final-title">Quiz Selesai!</div>
+      <div class="score-ring" id="score-ring">
+        <span class="num" id="final-score-num">0/10</span>
+        <span class="pct" id="final-score-pct">0%</span>
+      </div>
+      <div class="final-grade" id="final-grade">A</div>
+      <div class="final-stars" id="final-stars">⭐⭐⭐⭐⭐</div>
+      <div class="final-message" id="final-message"></div>
+      <div class="final-detail" id="final-detail"></div>
+      <div class="final-buttons">
+        <button class="btn btn-home" onclick="goHome()">🏠 Beranda</button>
+        <button class="btn btn-retry" onclick="restartQuiz()">🔄 Main Lagi</button>
       </div>
     </div>
-
-    <!-- ============ ANSWER RESULT PAGE ============ -->
-    <div id="page-result" class="page">
-      <div class="glass">
-        <div class="result-badge">
-          <span class="result-icon" id="result-icon">✅</span>
-          <div class="result-status" id="result-status">Benar!</div>
-        </div>
-        <div class="result-detail">
-          <div class="result-label">Jawaban Benar</div>
-          <div class="result-answer correct-ans" id="result-correct">B. Infrastructure Project Facilitation Office</div>
-        </div>
-        <div class="insight-box">
-          <div class="insight-label">💡 Insight</div>
-          <div class="insight-text" id="result-insight"></div>
-          <div class="insight-source" id="result-source"></div>
-        </div>
-        <div style="text-align:center;">
-          <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Lanjut →</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ============ FINAL RESULT PAGE ============ -->
-    <div id="page-final" class="page">
-      <div class="glass final-center">
-        <span class="final-icon" id="final-icon">🎉</span>
-        <h2 style="font-size:1.2rem;font-weight:700;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Quiz Selesai!</h2>
-        <div class="final-score">
-          <div class="score-circle" id="score-circle">
-            <span class="score-num" id="score-num">8/10</span>
-            <span class="score-pct" id="score-pct">80%</span>
-          </div>
-        </div>
-        <div class="final-score-label" id="score-label">Jawaban Benar</div>
-        <div class="final-message" id="final-message">✨ Luar biasa! Pengetahuan Anda sangat baik!</div>
-        <div class="final-detail" id="final-detail"></div>
-        <div class="btn-group">
-          <button class="btn btn-secondary" onclick="goHome()">🏠 Kembali ke Beranda</button>
-          <button class="btn btn-primary" onclick="restartQuiz()">🔄 Ulangi Quiz</button>
-        </div>
-      </div>
-    </div>
-
+    <div class="confetti-container" id="confetti"></div>
   </div>
 
   <script>
     // ============================================================
-    // DATA SOAL
+    // DATA SOAL (10 soal)
     // ============================================================
     const quizData = [
-      {
-        question: "IPFO merupakan singkatan dari...",
-        options: [
-          "Infrastructure Planning Funding Office",
-          "Infrastructure Project Facilitation Office",
-          "Integrated Project Finance Office",
-          "Infrastructure Partnership Funding Organization"
-        ],
-        correct: 1,
-        insight: "IPFO (Infrastructure Project Facilitation Office) adalah unit khusus yang dibentuk pemerintah untuk mempercepat realisasi proyek infrastruktur strategis nasional. Lembaga ini berperan sebagai jembatan koordinasi lintas kementerian/lembaga dan menyederhanakan proses perizinan agar proyek dapat berjalan lebih cepat dan efisien.",
-        source: "Peraturan Presiden Nomor 82 Tahun 2023 tentang Percepatan Pembangunan Infrastruktur"
-      },
-      {
-        question: "Fungsi utama IPFO adalah...",
-        options: [
-          "Menjadi kontraktor proyek nasional",
-          "Menjadi pusat koordinasi satu atap untuk percepatan proyek infrastruktur",
-          "Menetapkan suku bunga investasi",
-          "Mengelola seluruh BUMN konstruksi"
-        ],
-        correct: 1,
-        insight: "IPFO berfungsi sebagai one-stop service yang mengintegrasikan koordinasi antar kementerian, pemerintah daerah, dan swasta. Dengan pendekatan ini, pemangku kepentingan proyek tidak perlu lagi berurusan dengan banyak instansi secara terpisah, sehingga waktu penyelesaian proyek dapat dipangkas secara signifikan.",
-        source: "Kementerian Koordinator Bidang Infrastruktur dan Pembangunan Kewilayahan"
-      },
-      {
-        question: "IPFO berada di bawah...",
-        options: [
-          "Kementerian Keuangan",
-          "Badan Perencanaan Pembangunan Nasional",
-          "Kementerian Pekerjaan Umum dan Perumahan Rakyat",
-          "Kementerian Koordinator Bidang Infrastruktur dan Pembangunan Kewilayahan"
-        ],
-        correct: 3,
-        insight: "IPFO berada di bawah Kementerian Koordinator Bidang Infrastruktur dan Pembangunan Kewilayahan (Kemenko Infrastruktur), yang dibentuk pada Kabinet Merah Putih 2024. Kemenko ini mengoordinasikan seluruh kebijakan infrastruktur nasional agar terintegrasi dan tidak tumpang tindih antar sektor.",
-        source: "Peraturan Presiden tentang Kemenko Infrastruktur dan Pembangunan Kewilayahan, 2024"
-      },
-      {
-        question: "Melalui IPFO, pemerintah berupaya memperkuat kolaborasi antara...",
-        options: [
-          "Pemerintah dan swasta",
-          "Pemerintah dan media",
-          "Swasta dan universitas",
-          "Investor dan wisatawan"
-        ],
-        correct: 0,
-        insight: "IPFO menjadi katalis kolaborasi Pemerintah dan Swasta (Public-Private Partnership/PPP). Skema ini memungkinkan swasta berpartisipasi dalam pendanaan dan pengelolaan infrastruktur, mengurangi beban APBN, serta menghadirkan efisiensi manajemen sektor swasta dalam proyek publik.",
-        source: "Kementerian Keuangan – Direktorat Jenderal Pengelolaan Pembiayaan dan Risiko"
-      },
-      {
-        question: "Jika sebuah proyek strategis mengalami hambatan koordinasi antarinstansi, IPFO berperan untuk...",
-        options: [
-          "Menggantikan fungsi regulator untuk mempercepat penerbitan seluruh perizinan proyek",
-          "Mengambil alih kewenangan pengambilan keputusan dari seluruh instansi yang terlibat",
-          "Memfasilitasi penyelesaian hambatan dan koordinasi antar pihak",
-          "Menentukan skema pembiayaan akhir yang wajib digunakan oleh seluruh pihak"
-        ],
-        correct: 2,
-        insight: "IPFO bertindak sebagai fasilitator yang membantu menyelesaikan hambatan koordinasi, bukan sebagai pengganti regulator. Pendekatan ini memastikan proyek tetap berjalan sesuai regulasi tanpa terhambat birokrasi yang berbelit, namun tetap menghormati kewenangan masing-masing instansi.",
-        source: "Laporan Kinerja Kemenko Infrastruktur dan Pembangunan Kewilayahan, 2024"
-      },
-      {
-        question: "Apa tujuan utama investasi infrastruktur bagi suatu negara?",
-        options: [
-          "Meningkatkan kapasitas aset fisik pemerintah",
-          "Mendorong pertumbuhan ekonomi dan konektivitas",
-          "Memperkuat posisi pemerintah sebagai pelaku utama dalam seluruh aktivitas ekonomi",
-          "Meningkatkan impor"
-        ],
-        correct: 1,
-        insight: "Investasi infrastruktur bertujuan mendorong pertumbuhan ekonomi dan konektivitas melalui multiplier effect: membuka lapangan kerja, menurunkan biaya logistik, meningkatkan mobilitas barang dan jasa, serta memperluas akses masyarakat terhadap layanan dasar seperti pendidikan dan kesehatan.",
-        source: "World Bank – Infrastructure Investment and Economic Growth Report, 2024"
-      },
-      {
-        question: "Manakah yang termasuk contoh infrastruktur transportasi?",
-        options: [
-          "Pembangunan pusat data nasional",
-          "Pembangunan jalan tol",
-          "Pembangunan bendungan untuk irigasi pertanian",
-          "Pembangunan pembangkit listrik tenaga surya"
-        ],
-        correct: 1,
-        insight: "Jalan tol merupakan infrastruktur transportasi darat yang menghubungkan pusat produksi dengan pusat distribusi. Pembangunannya mempercepat waktu tempuh, menurunkan biaya logistik nasional, dan mendorong pertumbuhan ekonomi di wilayah yang terhubung.",
-        source: "Bappenas – RPJMN 2020–2024 Bidang Infrastruktur dan Kewilayahan"
-      },
-      {
-        question: "Dalam pembangunan infrastruktur di Indonesia, skema kerja sama pemerintah dan swasta dikenal sebagai...",
-        options: [
-          "IPO (Initial Public Offering)",
-          "PPP (Public-Private Partnership)",
-          "CSR (Corporate Social Responsibility)",
-          "ESG (Environmental, Social, and Governance)"
-        ],
-        correct: 1,
-        insight: "PPP atau Public-Private Partnership (di Indonesia dikenal sebagai KPBU – Kerja sama Pemerintah dengan Badan Usaha) adalah skema pembiayaan infrastruktur di mana swasta berpartisipasi dalam pendanaan, pembangunan, dan pengelolaan proyek dengan skema bagi hasil yang diatur dalam kontrak jangka panjang.",
-        source: "Peraturan Presiden Nomor 38 Tahun 2015 tentang KPBU"
-      },
-      {
-        question: "Salah satu manfaat pembangunan pelabuhan yang lebih modern adalah...",
-        options: [
-          "Membatasi biaya logistik",
-          "Mendukung distribusi barang",
-          "Menjaga efisiensi perdagangan",
-          "Memperlancar arus barang dan perdagangan"
-        ],
-        correct: 3,
-        insight: "Pelabuhan modern dengan sistem logistik terintegrasi dan digitalisasi pelayanan memperlancar arus barang dan perdagangan dengan mengurangi dwell time, mempercepat proses bongkar muat, dan menekan biaya logistik nasional yang saat ini masih lebih tinggi dibanding negara tetangga.",
-        source: "Kementerian Perhubungan – Direktorat Jenderal Perhubungan Laut"
-      },
-      {
-        question: "Apa kontribusi utama infrastruktur digital terhadap daya saing ekonomi suatu negara?",
-        options: [
-          "Mengurangi kebutuhan integrasi antar sektor ekonomi",
-          "Memungkinkan pertukaran data, inovasi layanan digital, dan peningkatan produktivitas lintas sektor",
-          "Menggantikan peran infrastruktur energi dan transportasi dalam mendukung aktivitas ekonomi",
-          "Membatasi arus data untuk meningkatkan efisiensi sistem informasi"
-        ],
-        correct: 1,
-        insight: "Infrastruktur digital (pusat data nasional, jaringan fiber optik, 5G, cloud computing) menjadi tulang punggung transformasi digital ekonomi. Infrastruktur ini memungkinkan pertukaran data cepat, mendorong inovasi layanan digital, meningkatkan produktivitas lintas sektor, dan memperkuat daya saing nasional di era Industri 4.0.",
-        source: "Kementerian Komunikasi dan Digital – Peta Jalan Digital Indonesia 2024–2029"
-      }
+      { question: "IPFO merupakan singkatan dari...", options: ["Infrastructure Planning Funding Office", "Infrastructure Project Facilitation Office", "Integrated Project Finance Office", "Infrastructure Partnership Funding Organization"], correct: 1, insight: "IPFO (Infrastructure Project Facilitation Office) adalah unit khusus yang dibentuk pemerintah untuk mempercepat realisasi proyek infrastruktur strategis nasional. Lembaga ini berperan sebagai jembatan koordinasi lintas kementerian/lembaga dan menyederhanakan proses perizinan agar proyek dapat berjalan lebih cepat dan efisien.", source: "Peraturan Presiden Nomor 82 Tahun 2023 tentang Percepatan Pembangunan Infrastruktur" },
+      { question: "Fungsi utama IPFO adalah...", options: ["Menjadi kontraktor proyek nasional", "Menjadi pusat koordinasi satu atap untuk percepatan proyek infrastruktur", "Menetapkan suku bunga investasi", "Mengelola seluruh BUMN konstruksi"], correct: 1, insight: "IPFO berfungsi sebagai one-stop service yang mengintegrasikan koordinasi antar kementerian, pemerintah daerah, dan swasta. Dengan pendekatan ini, pemangku kepentingan proyek tidak perlu lagi berurusan dengan banyak instansi secara terpisah, sehingga waktu penyelesaian proyek dapat dipangkas secara signifikan.", source: "Kementerian Koordinator Bidang Infrastruktur dan Pembangunan Kewilayahan" },
+      { question: "IPFO berada di bawah...", options: ["Kementerian Keuangan", "Badan Perencanaan Pembangunan Nasional", "Kementerian Pekerjaan Umum dan Perumahan Rakyat", "Kementerian Koordinator Bidang Infrastruktur dan Pembangunan Kewilayahan"], correct: 3, insight: "IPFO berada di bawah Kementerian Koordinator Bidang Infrastruktur dan Pembangunan Kewilayahan (Kemenko Infrastruktur), yang dibentuk pada Kabinet Merah Putih 2024. Kemenko ini mengoordinasikan seluruh kebijakan infrastruktur nasional agar terintegrasi dan tidak tumpang tindih antar sektor.", source: "Peraturan Presiden tentang Kemenko Infrastruktur dan Pembangunan Kewilayahan, 2024" },
+      { question: "Melalui IPFO, pemerintah berupaya memperkuat kolaborasi antara...", options: ["Pemerintah dan swasta", "Pemerintah dan media", "Swasta dan universitas", "Investor dan wisatawan"], correct: 0, insight: "IPFO menjadi katalis kolaborasi Pemerintah dan Swasta (Public-Private Partnership/PPP). Skema ini memungkinkan swasta berpartisipasi dalam pendanaan dan pengelolaan infrastruktur, mengurangi beban APBN, serta menghadirkan efisiensi manajemen sektor swasta dalam proyek publik.", source: "Kementerian Keuangan – Direktorat Jenderal Pengelolaan Pembiayaan dan Risiko" },
+      { question: "Jika sebuah proyek strategis mengalami hambatan koordinasi antarinstansi, IPFO berperan untuk...", options: ["Menggantikan fungsi regulator untuk mempercepat penerbitan seluruh perizinan proyek", "Mengambil alih kewenangan pengambilan keputusan dari seluruh instansi yang terlibat", "Memfasilitasi penyelesaian hambatan dan koordinasi antar pihak", "Menentukan skema pembiayaan akhir yang wajib digunakan oleh seluruh pihak"], correct: 2, insight: "IPFO bertindak sebagai fasilitator yang membantu menyelesaikan hambatan koordinasi, bukan sebagai pengganti regulator. Pendekatan ini memastikan proyek tetap berjalan sesuai regulasi tanpa terhambat birokrasi yang berbelit, namun tetap menghormati kewenangan masing-masing instansi.", source: "Laporan Kinerja Kemenko Infrastruktur dan Pembangunan Kewilayahan, 2024" },
+      { question: "Apa tujuan utama investasi infrastruktur bagi suatu negara?", options: ["Meningkatkan kapasitas aset fisik pemerintah", "Mendorong pertumbuhan ekonomi dan konektivitas", "Memperkuat posisi pemerintah sebagai pelaku utama dalam seluruh aktivitas ekonomi", "Meningkatkan impor"], correct: 1, insight: "Investasi infrastruktur bertujuan mendorong pertumbuhan ekonomi dan konektivitas melalui multiplier effect: membuka lapangan kerja, menurunkan biaya logistik, meningkatkan mobilitas barang dan jasa, serta memperluas akses masyarakat terhadap layanan dasar seperti pendidikan dan kesehatan.", source: "World Bank – Infrastructure Investment and Economic Growth Report, 2024" },
+      { question: "Manakah yang termasuk contoh infrastruktur transportasi?", options: ["Pembangunan pusat data nasional", "Pembangunan jalan tol", "Pembangunan bendungan untuk irigasi pertanian", "Pembangunan pembangkit listrik tenaga surya"], correct: 1, insight: "Jalan tol merupakan infrastruktur transportasi darat yang menghubungkan pusat produksi dengan pusat distribusi. Pembangunannya mempercepat waktu tempuh, menurunkan biaya logistik nasional, dan mendorong pertumbuhan ekonomi di wilayah yang terhubung.", source: "Bappenas – RPJMN 2020–2024 Bidang Infrastruktur dan Kewilayahan" },
+      { question: "Dalam pembangunan infrastruktur di Indonesia, skema kerja sama pemerintah dan swasta dikenal sebagai...", options: ["IPO (Initial Public Offering)", "PPP (Public-Private Partnership)", "CSR (Corporate Social Responsibility)", "ESG (Environmental, Social, and Governance)"], correct: 1, insight: "PPP atau Public-Private Partnership (di Indonesia dikenal sebagai KPBU – Kerja sama Pemerintah dengan Badan Usaha) adalah skema pembiayaan infrastruktur di mana swasta berpartisipasi dalam pendanaan, pembangunan, dan pengelolaan proyek dengan skema bagi hasil yang diatur dalam kontrak jangka panjang.", source: "Peraturan Presiden Nomor 38 Tahun 2015 tentang KPBU" },
+      { question: "Salah satu manfaat pembangunan pelabuhan yang lebih modern adalah...", options: ["Membatasi biaya logistik", "Mendukung distribusi barang", "Menjaga efisiensi perdagangan", "Memperlancar arus barang dan perdagangan"], correct: 3, insight: "Pelabuhan modern dengan sistem logistik terintegrasi dan digitalisasi pelayanan memperlancar arus barang dan perdagangan dengan mengurangi dwell time, mempercepat proses bongkar muat, dan menekan biaya logistik nasional yang saat ini masih lebih tinggi dibanding negara tetangga.", source: "Kementerian Perhubungan – Direktorat Jenderal Perhubungan Laut" },
+      { question: "Apa kontribusi utama infrastruktur digital terhadap daya saing ekonomi suatu negara?", options: ["Mengurangi kebutuhan integrasi antar sektor ekonomi", "Memungkinkan pertukaran data, inovasi layanan digital, dan peningkatan produktivitas lintas sektor", "Menggantikan peran infrastruktur energi dan transportasi dalam mendukung aktivitas ekonomi", "Membatasi arus data untuk meningkatkan efisiensi sistem informasi"], correct: 1, insight: "Infrastruktur digital (pusat data nasional, jaringan fiber optik, 5G, cloud computing) menjadi tulang punggung transformasi digital ekonomi. Infrastruktur ini memungkinkan pertukaran data cepat, mendorong inovasi layanan digital, meningkatkan produktivitas lintas sektor, dan memperkuat daya saing nasional di era Industri 4.0.", source: "Kementerian Komunikasi dan Digital – Peta Jalan Digital Indonesia 2024–2029" }
     ];
 
     // ============================================================
     // STATE
     // ============================================================
-    const state = {
-      current: 0,
-      score: 0,
-      userAnswers: [],
-      answered: false
-    };
+    const state = { current: 0, score: 0, streak: 0, userAnswers: [], answered: false };
 
     // ============================================================
-    // AUDIO ENGINE (Web Audio API)
+    // PARTICLES
     // ============================================================
-    const Sound = {
-      ctx: null,
+    (function initParticles() {
+      const c = document.getElementById('particles');
+      const colors = ['#4f8cff', '#00d4ff', '#9b5cfc', '#ff6bcb', '#00ff88'];
+      for (let i = 0; i < 35; i++) {
+        const el = document.createElement('div');
+        el.className = 'particle';
+        const size = 4 + Math.random() * 20;
+        el.style.cssText = [
+          'width:' + size + 'px; height:' + size + 'px;',
+          'left:' + (Math.random() * 100) + '%;',
+          'background:' + colors[i % colors.length] + ';',
+          'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px') + ';',
+          'animation-duration:' + (12 + Math.random() * 20) + 's;',
+          'animation-delay:' + (Math.random() * 20) + 's;',
+          'opacity:' + (0.05 + Math.random() * 0.1) + ';'
+        ].join('');
+        c.appendChild(el);
+      }
+    })();
 
-      _init() {
-        if (!this.ctx) {
-          this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
-      },
+    // ============================================================
+    // BACKGROUND MUSIC (looping ambient)
+    // ============================================================
+    const BGM = {
+      ctx: null, master: null, enabled: true, started: false,
+      _oscs: [], _bassTimer: null, _chimeTimer: null,
 
-      _tone(freq, delay, dur, vol, type) {
-        const now = this.ctx.currentTime;
-        const t = now + delay;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = type || 'sine';
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(vol || 0.25, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
-        osc.connect(gain).connect(this.ctx.destination);
-        osc.start(t);
-        osc.stop(t + dur + 0.01);
-      },
-
-      correct() {
-        this._init();
-        this._tone(523.25, 0, 0.18, 0.25);   // C5
-        this._tone(659.25, 0.1, 0.18, 0.25);  // E5
-        this._tone(783.99, 0.2, 0.22, 0.25);  // G5
-      },
-
-      wrong() {
-        this._init();
-        this._tone(330, 0, 0.2, 0.2, 'sawtooth');
-        this._tone(277, 0.1, 0.25, 0.2, 'sawtooth');
-      },
-
-      complete() {
-        this._init();
-        this._tone(523.25, 0, 0.15, 0.25);
-        this._tone(659.25, 0.12, 0.15, 0.25);
-        this._tone(783.99, 0.24, 0.15, 0.25);
-        this._tone(1046.5, 0.36, 0.3, 0.3);
-      },
-
-      click() {
-        this._init();
-        this._tone(900, 0, 0.04, 0.06);
+      init() {
+        if (this.ctx) return;
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = 0.12;
+        this.master.connect(this.ctx.destination);
       },
 
       start() {
-        this._init();
-        this._tone(440, 0, 0.1, 0.15);
-        this._tone(554, 0.1, 0.1, 0.15);
-        this._tone(659, 0.2, 0.15, 0.15);
+        this.init();
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        if (this.started) return;
+        this.started = true;
+        this._pad();
+        this._bass();
+        this._chimes();
+      },
+
+      stop() {
+        this.started = false;
+        this._oscs.forEach(o => { try { o.stop(); } catch(e) {} });
+        this._oscs = [];
+        clearInterval(this._bassTimer);
+        clearInterval(this._chimeTimer);
+      },
+
+      toggle() {
+        this.enabled = !this.enabled;
+        if (this.master) this.master.gain.value = this.enabled ? 0.12 : 0;
+        document.getElementById('music-toggle').textContent = this.enabled ? '🔊' : '🔇';
+        return this.enabled;
+      },
+
+      _pad() {
+        const freqs = [261.63, 329.63, 392.00, 349.23];
+        const that = this;
+        function playPadSet() {
+          if (!that.started) return;
+          that._oscs = that._oscs.filter(o => {
+            try { o.stop(); return false; } catch(e) { return false; }
+          });
+          const now = that.ctx.currentTime;
+          freqs.forEach((f, i) => {
+            const osc = that.ctx.createOscillator();
+            const gain = that.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = f;
+            gain.gain.setValueAtTime(0.025, now);
+            gain.gain.linearRampToValueAtTime(0.025, now + 7);
+            gain.gain.linearRampToValueAtTime(0.001, now + 8);
+            osc.connect(gain).connect(that.master);
+            osc.start(now);
+            osc.stop(now + 8);
+            that._oscs.push(osc);
+          });
+        }
+        playPadSet();
+        setInterval(playPadSet, 8000);
+      },
+
+      _bass() {
+        const that = this;
+        function playBass() {
+          if (!that.started) return;
+          const now = that.ctx.currentTime;
+          const osc = that.ctx.createOscillator();
+          const gain = that.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.value = 65.41;
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.connect(gain).connect(that.master);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        }
+        playBass();
+        this._bassTimer = setInterval(playBass, 1800);
+      },
+
+      _chimes() {
+        const that = this;
+        const notes = [523.25, 659.25, 783.99, 587.33, 698.46, 880.00];
+        function playChime() {
+          if (!that.started) return;
+          const now = that.ctx.currentTime;
+          const freq = notes[Math.floor(Math.random() * notes.length)];
+          const osc = that.ctx.createOscillator();
+          const gain = that.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.02, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+          osc.connect(gain).connect(that.master);
+          osc.start(now);
+          osc.stop(now + 1.3);
+        }
+        playChime();
+        this._chimeTimer = setInterval(playChime, 3200 + Math.random() * 1600);
       }
     };
 
+    function toggleMusic() { BGM.toggle(); }
+
     // ============================================================
-    // PAGE NAVIGATION
+    // SOUND FX
     // ============================================================
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(p => {
-        p.classList.remove('active', 'exit');
-      });
-      const page = document.getElementById(pageId);
-      void page.offsetWidth; // force reflow
+    const SFX = {
+      ctx: null,
+      _init() {
+        if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+      },
+      _tone(f, d, dur, vol, type) {
+        const now = this.ctx.currentTime; const t = now + d;
+        const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
+        osc.type = type || 'sine'; osc.frequency.value = f;
+        gain.gain.setValueAtTime(vol || 0.25, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        osc.connect(gain).connect(this.ctx.destination);
+        osc.start(t); osc.stop(t + dur + 0.01);
+      },
+      correct() { this._init(); this._tone(523.25,0,0.18,0.25); this._tone(659.25,0.1,0.18,0.25); this._tone(783.99,0.2,0.22,0.25); },
+      wrong() { this._init(); this._tone(330,0,0.2,0.2,'sawtooth'); this._tone(277,0.1,0.25,0.2,'sawtooth'); },
+      complete() { this._init(); this._tone(523.25,0,0.15,0.25); this._tone(659.25,0.12,0.15,0.25); this._tone(783.99,0.24,0.15,0.25); this._tone(1046.5,0.36,0.3,0.3); },
+      click() { this._init(); this._tone(900,0,0.04,0.06); },
+      streak() { this._init(); this._tone(587.33,0,0.12,0.2); this._tone(783.99,0.1,0.15,0.2); }
+    };
+
+    // ============================================================
+    // PAGE NAV
+    // ============================================================
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active', 'exit'));
+      const page = document.getElementById(id);
+      void page.offsetWidth;
       page.classList.add('active');
     }
 
@@ -788,11 +815,9 @@
     // COVER → START
     // ============================================================
     function startQuiz() {
-      Sound.start();
-      state.current = 0;
-      state.score = 0;
-      state.userAnswers = [];
-      state.answered = false;
+      BGM.start();
+      SFX.click();
+      state.current = 0; state.score = 0; state.streak = 0; state.userAnswers = []; state.answered = false;
       showPage('page-question');
       renderQuestion();
     }
@@ -803,10 +828,21 @@
     function renderQuestion() {
       const q = quizData[state.current];
       const total = quizData.length;
+      const idx = state.current;
 
-      document.getElementById('progress-text').textContent = `${state.current + 1} / ${total}`;
-      document.getElementById('progress-fill').style.width = `${((state.current + 1) / total) * 100}%`;
-      document.getElementById('q-number').textContent = `SOAL ${state.current + 1}`;
+      document.getElementById('hud-stage').textContent = 'STAGE ' + (idx + 1) + '/' + total;
+      document.getElementById('hud-score').textContent = state.score;
+      document.getElementById('hud-streak').textContent = state.streak;
+
+      const prog = document.getElementById('hud-progress');
+      prog.innerHTML = '';
+      for (let i = 0; i < total; i++) {
+        const seg = document.createElement('div');
+        seg.className = 'seg' + (i < idx ? ' filled' : '') + (i === idx ? ' filled-glow' : '');
+        prog.appendChild(seg);
+      }
+
+      document.getElementById('q-badge').textContent = 'PERTANYAAN ' + (idx + 1);
       document.getElementById('q-text').textContent = q.question;
 
       const container = document.getElementById('q-options');
@@ -814,17 +850,14 @@
       state.answered = false;
 
       const letters = ['A', 'B', 'C', 'D'];
-      q.options.forEach((opt, idx) => {
+      q.options.forEach((opt, i) => {
         const btn = document.createElement('button');
-        btn.className = 'option-btn';
-        btn.innerHTML = `<span class="letter">${letters[idx]}</span><span>${opt}</span>`;
-        btn.dataset.index = idx;
-        btn.addEventListener('click', () => selectAnswer(idx));
+        btn.className = 'opt-btn';
+        btn.style.animationDelay = (i * 0.07) + 's';
+        btn.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span>';
+        btn.addEventListener('click', () => selectAnswer(i));
         container.appendChild(btn);
       });
-
-      // Remove focus from any previously focused element
-      document.activeElement?.blur();
     }
 
     // ============================================================
@@ -833,51 +866,61 @@
     function selectAnswer(idx) {
       if (state.answered) return;
       state.answered = true;
-
       const q = quizData[state.current];
       const isCorrect = idx === q.correct;
-      const buttons = document.querySelectorAll('.option-btn');
-
-      // Disable all
-      buttons.forEach(btn => btn.classList.add('disabled'));
-
-      // Highlight correct & wrong
-      buttons.forEach((btn, i) => {
-        if (i === q.correct) btn.classList.add('correct');
-        if (i === idx && !isCorrect) btn.classList.add('wrong');
+      const btns = document.querySelectorAll('.opt-btn');
+      btns.forEach(b => b.classList.add('disabled'));
+      btns.forEach((b, i) => {
+        if (i === q.correct) b.classList.add('correct');
+        if (i === idx && !isCorrect) b.classList.add('wrong');
       });
 
-      state.userAnswers[state.current] = idx;
       if (isCorrect) {
         state.score++;
-        Sound.correct();
+        state.streak++;
+        SFX.correct();
+        showScoreFly('+' + 1, true);
+        if (state.streak > 0 && state.streak % 3 === 0) {
+          SFX.streak();
+          showScoreFly('🔥 Streak x' + state.streak + '!', false, true);
+        }
       } else {
-        Sound.wrong();
+        state.streak = 0;
+        SFX.wrong();
       }
+      state.userAnswers[state.current] = idx;
 
-      // After brief delay, show result page
-      setTimeout(() => {
-        showAnswerResult(isCorrect, q.correct);
-      }, 600);
+      setTimeout(() => showAnswerResult(isCorrect, q.correct), 700);
+    }
+
+    function showScoreFly(text, isPlus, isStreak) {
+      const el = document.createElement('div');
+      el.className = 'score-fly' + (isStreak ? ' streak' : isPlus ? ' plus' : ' minus');
+      el.textContent = text;
+      el.style.left = (Math.random() * 40 + 30) + '%';
+      el.style.top = '35%';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1100);
     }
 
     // ============================================================
-    // SHOW ANSWER RESULT
+    // ANSWER RESULT
     // ============================================================
     function showAnswerResult(isCorrect, correctIdx) {
       const q = quizData[state.current];
       const letters = ['A', 'B', 'C', 'D'];
 
-      document.getElementById('result-icon').textContent = isCorrect ? '✅' : '❌';
-      const statusEl = document.getElementById('result-status');
-      statusEl.textContent = isCorrect ? 'Benar! 🎉' : 'Salah!';
-      statusEl.className = 'result-status ' + (isCorrect ? 'correct-text' : 'wrong-text');
+      const iconEl = document.getElementById('result-icon-big');
+      iconEl.textContent = isCorrect ? '✅' : '❌';
+      iconEl.className = 'result-icon-big ' + (isCorrect ? 'correct' : 'wrong');
 
-      document.getElementById('result-correct').textContent =
-        `${letters[correctIdx]}. ${q.options[correctIdx]}`;
+      const statusEl = document.getElementById('result-status-big');
+      statusEl.textContent = isCorrect ? 'Benar!' : 'Salah!';
+      statusEl.className = 'result-status-big ' + (isCorrect ? 'correct-text' : 'wrong-text');
 
-      document.getElementById('result-insight').textContent = q.insight;
-      document.getElementById('result-source').textContent = 'Sumber: ' + q.source;
+      document.getElementById('result-answer-box').textContent = letters[correctIdx] + '. ' + q.options[correctIdx];
+      document.getElementById('result-insight-text').textContent = q.insight;
+      document.getElementById('result-insight-source').textContent = 'Sumber: ' + q.source;
 
       const isLast = state.current === quizData.length - 1;
       document.getElementById('btn-next').textContent = isLast ? 'Lihat Hasil Akhir →' : 'Lanjut →';
@@ -889,7 +932,7 @@
     // NEXT QUESTION
     // ============================================================
     function nextQuestion() {
-      Sound.click();
+      SFX.click();
       if (state.current + 1 >= quizData.length) {
         showFinalResult();
       } else {
@@ -904,73 +947,81 @@
     // FINAL RESULT
     // ============================================================
     function showFinalResult() {
-      Sound.complete();
+      SFX.complete();
       const total = quizData.length;
       const pct = Math.round((state.score / total) * 100);
 
-      document.getElementById('score-num').textContent = `${state.score}/${total}`;
-      document.getElementById('score-pct').textContent = `${pct}%`;
-      document.getElementById('score-circle').style.setProperty('--pct', `${pct}%`);
+      document.getElementById('score-ring').style.setProperty('--pct', pct + '%');
+      document.getElementById('final-score-num').textContent = state.score + '/' + total;
+      document.getElementById('final-score-pct').textContent = pct + '%';
 
-      let icon, msg;
-      if (pct === 100) {
-        icon = '🏆';
-        msg = 'Sempurna! Anda benar-benar ahli dalam infrastruktur Indonesia!';
-      } else if (pct >= 80) {
-        icon = '🌟';
-        msg = 'Luar biasa! Pengetahuan Anda tentang investasi infrastruktur sangat baik!';
-      } else if (pct >= 60) {
-        icon = '💪';
-        msg = 'Cukup bagus! Masih ada ruang untuk belajar lebih dalam lagi.';
-      } else if (pct >= 40) {
-        icon = '📖';
-        msg = 'Terus belajar! Pelajari kembali insight dari setiap jawaban di atas.';
-      } else {
-        icon = '🚀';
-        msg = 'Jangan menyerah! Yuk pelajari lagi soal-soal ini untuk menambah wawasan.';
-      }
-      document.getElementById('final-icon').textContent = icon;
-      document.getElementById('final-message').textContent = msg;
+      let trophy, grade, gradeClass, stars, msg;
+      if (pct === 100) { trophy = '🏆'; grade = 'S'; gradeClass = 's-rank'; stars = '⭐⭐⭐⭐⭐'; msg = 'Sempurna! Anda Master Infrastruktur Indonesia! 🎉'; }
+      else if (pct >= 80) { trophy = '🌟'; grade = 'A'; gradeClass = 'a-rank'; stars = '⭐⭐⭐⭐☆'; msg = 'Luar biasa! Pengetahuan Anda sangat baik! 💪'; }
+      else if (pct >= 60) { trophy = '🔥'; grade = 'B'; gradeClass = 'b-rank'; stars = '⭐⭐⭐☆☆'; msg = 'Bagus! Terus tingkatkan wawasan Anda! 📖'; }
+      else if (pct >= 40) { trophy = '📖'; grade = 'C'; gradeClass = 'c-rank'; stars = '⭐⭐☆☆☆'; msg = 'Cukup, masih banyak yang bisa dipelajari! 🚀'; }
+      else { trophy = '💪'; grade = 'D'; gradeClass = 'd-rank'; stars = '⭐☆☆☆☆'; msg = 'Jangan menyerah! Yuk belajar lagi dari insight di atas! 💡'; }
 
-      const correctLabel = 'jawaban benar';
-      document.getElementById('score-label').textContent = `${state.score} dari ${total} ${correctLabel}`;
+      document.getElementById('final-trophy').textContent = trophy;
+      const gradeEl = document.getElementById('final-grade');
+      gradeEl.textContent = 'Grade ' + grade;
+      gradeEl.className = 'final-grade ' + gradeClass;
+      document.getElementById('final-stars').textContent = stars;
+      document.getElementById('final-message').textContent = '“' + msg + '”';
 
-      // Show correct/incorrect breakdown in detail
-      const parts = [];
-      const letters = ['A', 'B', 'C', 'D'];
+      const pts = [];
+      const letters = ['A','B','C','D'];
       for (let i = 0; i < quizData.length; i++) {
-        const userAns = state.userAnswers[i];
-        const isCorrect = userAns === quizData[i].correct;
-        if (isCorrect) {
-          parts.push('✅ Soal ' + (i + 1) + ': Benar');
-        } else {
-          parts.push('❌ Soal ' + (i + 1) + ': Salah (jawaban: ' + letters[quizData[i].correct] + ')');
-        }
+        const ua = state.userAnswers[i];
+        const corr = ua === quizData[i].correct;
+        pts.push((corr ? '✅' : '❌') + ' Soal ' + (i+1) + ': ' + (corr ? 'Benar' : 'Salah (jawab: ' + letters[quizData[i].correct] + ')'));
       }
-      document.getElementById('final-detail').textContent = parts.join(' · ');
+      document.getElementById('final-detail').textContent = pts.join(' · ');
+
+      // Confetti
+      spawnConfetti();
 
       showPage('page-final');
     }
 
     // ============================================================
-    // RESTART / GO HOME
+    // CONFETTI
+    // ============================================================
+    function spawnConfetti() {
+      const c = document.getElementById('confetti');
+      c.innerHTML = '';
+      const colors = ['#ff6bcb','#00ff88','#4f8cff','#ffd700','#ff4757','#00d4ff','#9b5cfc'];
+      for (let i = 0; i < 80; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        const s = 4 + Math.random() * 8;
+        el.style.cssText = [
+          'left:' + (Math.random() * 100) + '%;',
+          'width:' + s + 'px; height:' + (s * (0.4 + Math.random() * 1)) + 'px;',
+          'background:' + colors[Math.floor(Math.random() * colors.length)] + ';',
+          'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px') + ';',
+          'animation-duration:' + (2 + Math.random() * 3) + 's;',
+          'animation-delay:' + (Math.random() * 2) + 's;'
+        ].join('');
+        c.appendChild(el);
+      }
+      setTimeout(() => c.innerHTML = '', 6000);
+    }
+
+    // ============================================================
+    // RESTART / HOME
     // ============================================================
     function restartQuiz() {
-      Sound.click();
-      state.current = 0;
-      state.score = 0;
-      state.userAnswers = [];
-      state.answered = false;
+      SFX.click();
+      state.current = 0; state.score = 0; state.streak = 0; state.userAnswers = []; state.answered = false;
       showPage('page-question');
       renderQuestion();
     }
 
     function goHome() {
-      Sound.click();
-      state.current = 0;
-      state.score = 0;
-      state.userAnswers = [];
-      state.answered = false;
+      SFX.click();
+      state.current = 0; state.score = 0; state.streak = 0; state.userAnswers = []; state.answered = false;
+      document.getElementById('confetti').innerHTML = '';
       showPage('page-cover');
     }
   </script>
