@@ -134,19 +134,6 @@
       line-height: 1.7;
       animation: fadeSlideUp 0.6s 0.25s both;
     }
-    .cover-stats {
-      display: flex; gap: 20px;
-      animation: fadeSlideUp 0.6s 0.35s both;
-    }
-    .cover-stat {
-      padding: 12px 20px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-      min-width: 90px;
-    }
-    .cover-stat .num { font-size: 1.5rem; font-weight: 800; color: #4f8cff; }
-    .cover-stat .label { font-size: 0.7rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
     .btn-play {
       position: relative;
       padding: 16px 56px;
@@ -238,12 +225,12 @@
       text-transform: uppercase;
     }
     .q-text {
-      font-size: clamp(1.2rem, 3vw, 1.7rem);
-      font-weight: 700;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 800;
       text-align: center;
       line-height: 1.4;
       color: rgba(255,255,255,0.95);
-      max-width: 700px;
+      max-width: 750px;
     }
     .options-grid {
       display: grid;
@@ -467,36 +454,15 @@
       font-size: clamp(0.7rem, 1.5vw, 0.85rem);
       color: rgba(255,255,255,0.4);
     }
-    .final-grade {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 900;
-      text-shadow: 0 0 40px currentColor;
-    }
-    .final-grade.s-rank { color: #ffd700; }
-    .final-grade.a-rank { color: #00ff88; }
-    .final-grade.b-rank { color: #4f8cff; }
-    .final-grade.c-rank { color: #9b5cfc; }
-    .final-grade.d-rank { color: #ff4757; }
-
-    .final-stars {
-      font-size: 1.4rem;
-      letter-spacing: 4px;
-    }
     .final-message {
-      font-size: clamp(0.95rem, 2vw, 1.1rem);
-      font-weight: 600;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 700;
       text-align: center;
-      padding: 12px 16px;
+      padding: 12px 20px;
       border-radius: 12px;
       background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.8);
+      color: rgba(255,255,255,0.85);
       line-height: 1.5;
-    }
-    .final-detail {
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.3);
-      text-align: center;
-      line-height: 1.6;
     }
     .final-buttons {
       display: flex; gap: 12px; width: 100%; max-width: 400px;
@@ -523,6 +489,58 @@
     }
     .btn-retry:hover { box-shadow: 0 0 40px rgba(79,140,255,0.4); }
 
+    /* ===== HOME BUTTON ===== */
+    .btn-home-top {
+      position: absolute; top: 20px; left: 20px; z-index: 10;
+      width: 40px; height: 40px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.4);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-home-top:hover {
+      background: rgba(255,71,87,0.15);
+      border-color: rgba(255,71,87,0.3);
+      color: #ff4757;
+      transform: scale(1.1);
+    }
+
+    /* ===== CONFIRM MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.active { display: flex; }
+    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+    .modal-box {
+      background: linear-gradient(135deg, #0f1638, #1a1f4a);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 28px 24px;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      animation: popBounce 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-box .icon { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+    .modal-box .title { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+    .modal-box .desc { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-bottom: 20px; line-height: 1.5; }
+    .modal-buttons { display: flex; gap: 10px; }
+    .modal-buttons .btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 0.85rem; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.2s ease; }
+    .modal-buttons .btn:hover { transform: scale(1.04); }
+    .modal-buttons .btn:active { transform: scale(0.96); }
+    .modal-buttons .btn-cancel { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1); }
+    .modal-buttons .btn-cancel:hover { background: rgba(255,255,255,0.1); }
+    .modal-buttons .btn-confirm { background: linear-gradient(135deg, #ff4757, #e83a4a); color: #fff; box-shadow: 0 0 20px rgba(255,71,87,0.25); }
+    .modal-buttons .btn-confirm:hover { box-shadow: 0 0 30px rgba(255,71,87,0.4); }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 640px) {
       .options-grid { grid-template-columns: 1fr; gap: 10px; }
@@ -531,8 +549,7 @@
       .hud-stat { font-size: 0.7rem; }
       .opt-btn { padding: 12px 14px; }
       .opt-btn .letter { width: 30px; height: 30px; font-size: 0.75rem; }
-      .cover-stat { min-width: 70px; padding: 10px 14px; }
-      .cover-stat .num { font-size: 1.2rem; }
+
       .final-buttons { flex-direction: column; gap: 8px; }
       .q-text { font-size: 1.1rem; }
     }
@@ -546,7 +563,6 @@
 <body>
 
   <div id="particles"></div>
-  <button id="music-toggle" onclick="toggleMusic()" title="Musik latar">🔊</button>
 
   <!-- ===== COVER ===== -->
   <div id="page-cover" class="page active">
@@ -560,16 +576,12 @@
       10 pertanyaan tentang IPFO, PPP, dan pembangunan infrastruktur Indonesia.
       Buktikan pengetahuan Anda!
     </p>
-    <div class="cover-stats">
-      <div class="cover-stat"><div class="num">10</div><div class="label">Soal</div></div>
-      <div class="cover-stat"><div class="num">⏱️</div><div class="label">~5 Menit</div></div>
-      <div class="cover-stat"><div class="num">🏆</div><div class="label">Skor</div></div>
-    </div>
     <button class="btn-play" onclick="startQuiz()">Mulai Quiz</button>
   </div>
 
   <!-- ===== QUESTION ===== -->
   <div id="page-question" class="page">
+    <button class="btn-home-top" onclick="confirmGoHome()" title="Kembali ke Beranda">✕</button>
     <div class="hud">
       <div class="hud-stage" id="hud-stage">STAGE 1/10</div>
       <div class="hud-progress" id="hud-progress"></div>
@@ -587,6 +599,7 @@
 
   <!-- ===== ANSWER RESULT ===== -->
   <div id="page-result" class="page">
+    <button class="btn-home-top" onclick="confirmGoHome()" title="Kembali ke Beranda">✕</button>
     <div class="result-inner">
       <div class="result-icon-big" id="result-icon-big">✅</div>
       <div class="result-status-big" id="result-status-big">BENAR!</div>
@@ -609,16 +622,26 @@
         <span class="num" id="final-score-num">0/10</span>
         <span class="pct" id="final-score-pct">0%</span>
       </div>
-      <div class="final-grade" id="final-grade">A</div>
-      <div class="final-stars" id="final-stars">⭐⭐⭐⭐⭐</div>
       <div class="final-message" id="final-message"></div>
-      <div class="final-detail" id="final-detail"></div>
       <div class="final-buttons">
         <button class="btn btn-home" onclick="goHome()">🏠 Beranda</button>
         <button class="btn btn-retry" onclick="restartQuiz()">🔄 Main Lagi</button>
       </div>
     </div>
     <div class="confetti-container" id="confetti"></div>
+  </div>
+
+  <!-- ===== CONFIRM MODAL ===== -->
+  <div class="modal-overlay" id="modal-confirm">
+    <div class="modal-box">
+      <span class="icon">🚪</span>
+      <div class="title">Kembali ke Beranda?</div>
+      <div class="desc">Progress quiz saat ini akan hilang. Apakah kamu yakin?</div>
+      <div class="modal-buttons">
+        <button class="btn btn-cancel" onclick="closeModal()">Batal</button>
+        <button class="btn btn-confirm" onclick="doGoHome()">Ya, Keluar</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -666,115 +689,7 @@
       }
     })();
 
-    // ============================================================
-    // BACKGROUND MUSIC (looping ambient)
-    // ============================================================
-    const BGM = {
-      ctx: null, master: null, enabled: true, started: false,
-      _oscs: [], _bassTimer: null, _chimeTimer: null,
 
-      init() {
-        if (this.ctx) return;
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        this.master = this.ctx.createGain();
-        this.master.gain.value = 0.12;
-        this.master.connect(this.ctx.destination);
-      },
-
-      start() {
-        this.init();
-        if (this.ctx.state === 'suspended') this.ctx.resume();
-        if (this.started) return;
-        this.started = true;
-        this._pad();
-        this._bass();
-        this._chimes();
-      },
-
-      stop() {
-        this.started = false;
-        this._oscs.forEach(o => { try { o.stop(); } catch(e) {} });
-        this._oscs = [];
-        clearInterval(this._bassTimer);
-        clearInterval(this._chimeTimer);
-      },
-
-      toggle() {
-        this.enabled = !this.enabled;
-        if (this.master) this.master.gain.value = this.enabled ? 0.12 : 0;
-        document.getElementById('music-toggle').textContent = this.enabled ? '🔊' : '🔇';
-        return this.enabled;
-      },
-
-      _pad() {
-        const freqs = [261.63, 329.63, 392.00, 349.23];
-        const that = this;
-        function playPadSet() {
-          if (!that.started) return;
-          that._oscs = that._oscs.filter(o => {
-            try { o.stop(); return false; } catch(e) { return false; }
-          });
-          const now = that.ctx.currentTime;
-          freqs.forEach((f, i) => {
-            const osc = that.ctx.createOscillator();
-            const gain = that.ctx.createGain();
-            osc.type = 'sine';
-            osc.frequency.value = f;
-            gain.gain.setValueAtTime(0.025, now);
-            gain.gain.linearRampToValueAtTime(0.025, now + 7);
-            gain.gain.linearRampToValueAtTime(0.001, now + 8);
-            osc.connect(gain).connect(that.master);
-            osc.start(now);
-            osc.stop(now + 8);
-            that._oscs.push(osc);
-          });
-        }
-        playPadSet();
-        setInterval(playPadSet, 8000);
-      },
-
-      _bass() {
-        const that = this;
-        function playBass() {
-          if (!that.started) return;
-          const now = that.ctx.currentTime;
-          const osc = that.ctx.createOscillator();
-          const gain = that.ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.value = 65.41;
-          gain.gain.setValueAtTime(0.08, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-          osc.connect(gain).connect(that.master);
-          osc.start(now);
-          osc.stop(now + 0.4);
-        }
-        playBass();
-        this._bassTimer = setInterval(playBass, 1800);
-      },
-
-      _chimes() {
-        const that = this;
-        const notes = [523.25, 659.25, 783.99, 587.33, 698.46, 880.00];
-        function playChime() {
-          if (!that.started) return;
-          const now = that.ctx.currentTime;
-          const freq = notes[Math.floor(Math.random() * notes.length)];
-          const osc = that.ctx.createOscillator();
-          const gain = that.ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-          gain.gain.setValueAtTime(0.02, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-          osc.connect(gain).connect(that.master);
-          osc.start(now);
-          osc.stop(now + 1.3);
-        }
-        playChime();
-        this._chimeTimer = setInterval(playChime, 3200 + Math.random() * 1600);
-      }
-    };
-
-    function toggleMusic() { BGM.toggle(); }
 
     // ============================================================
     // SOUND FX
@@ -815,7 +730,6 @@
     // COVER → START
     // ============================================================
     function startQuiz() {
-      BGM.start();
       SFX.click();
       state.current = 0; state.score = 0; state.streak = 0; state.userAnswers = []; state.answered = false;
       showPage('page-question');
@@ -955,28 +869,15 @@
       document.getElementById('final-score-num').textContent = state.score + '/' + total;
       document.getElementById('final-score-pct').textContent = pct + '%';
 
-      let trophy, grade, gradeClass, stars, msg;
-      if (pct === 100) { trophy = '🏆'; grade = 'S'; gradeClass = 's-rank'; stars = '⭐⭐⭐⭐⭐'; msg = 'Sempurna! Anda Master Infrastruktur Indonesia! 🎉'; }
-      else if (pct >= 80) { trophy = '🌟'; grade = 'A'; gradeClass = 'a-rank'; stars = '⭐⭐⭐⭐☆'; msg = 'Luar biasa! Pengetahuan Anda sangat baik! 💪'; }
-      else if (pct >= 60) { trophy = '🔥'; grade = 'B'; gradeClass = 'b-rank'; stars = '⭐⭐⭐☆☆'; msg = 'Bagus! Terus tingkatkan wawasan Anda! 📖'; }
-      else if (pct >= 40) { trophy = '📖'; grade = 'C'; gradeClass = 'c-rank'; stars = '⭐⭐☆☆☆'; msg = 'Cukup, masih banyak yang bisa dipelajari! 🚀'; }
-      else { trophy = '💪'; grade = 'D'; gradeClass = 'd-rank'; stars = '⭐☆☆☆☆'; msg = 'Jangan menyerah! Yuk belajar lagi dari insight di atas! 💡'; }
+      let trophy, msg;
+      if (pct === 100) { trophy = '🏆'; msg = 'Sempurna! Kamu benar-benar luar biasa! 🎉'; }
+      else if (pct >= 80) { trophy = '🌟'; msg = 'Kamu hebat! Pengetahuan yang mengesankan! 💪'; }
+      else if (pct >= 60) { trophy = '🔥'; msg = 'Kerja bagus! Terus tingkatkan! 📖'; }
+      else if (pct >= 40) { trophy = '📖'; msg = 'Belajar itu proses, kamu pasti bisa lebih baik! 🚀'; }
+      else { trophy = '💪'; msg = 'Tetap semangat! Cobain lagi untuk hasil yang lebih baik! 💡'; }
 
       document.getElementById('final-trophy').textContent = trophy;
-      const gradeEl = document.getElementById('final-grade');
-      gradeEl.textContent = 'Grade ' + grade;
-      gradeEl.className = 'final-grade ' + gradeClass;
-      document.getElementById('final-stars').textContent = stars;
       document.getElementById('final-message').textContent = '“' + msg + '”';
-
-      const pts = [];
-      const letters = ['A','B','C','D'];
-      for (let i = 0; i < quizData.length; i++) {
-        const ua = state.userAnswers[i];
-        const corr = ua === quizData[i].correct;
-        pts.push((corr ? '✅' : '❌') + ' Soal ' + (i+1) + ': ' + (corr ? 'Benar' : 'Salah (jawab: ' + letters[quizData[i].correct] + ')'));
-      }
-      document.getElementById('final-detail').textContent = pts.join(' · ');
 
       // Confetti
       spawnConfetti();
@@ -1018,8 +919,20 @@
       renderQuestion();
     }
 
-    function goHome() {
+    function confirmGoHome() {
       SFX.click();
+      document.getElementById('modal-confirm').classList.add('active');
+    }
+    function closeModal() {
+      SFX.click();
+      document.getElementById('modal-confirm').classList.remove('active');
+    }
+    function doGoHome() {
+      SFX.click();
+      document.getElementById('modal-confirm').classList.remove('active');
+      goHome();
+    }
+    function goHome() {
       state.current = 0; state.score = 0; state.streak = 0; state.userAnswers = []; state.answered = false;
       document.getElementById('confetti').innerHTML = '';
       showPage('page-cover');
