@@ -65,17 +65,14 @@
     #page-cover {
       flex-direction: column; text-align: center;
       position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      bottom: auto; right: auto;
-      inset: auto;
+      top: 50%; left: 0; right: 0;
+      transform: translateY(-50%);
+      bottom: auto;
       overflow: hidden;
       justify-content: space-between;
       gap: 0;
-      width: min(92vw, 820px);
-      height: 75vh; max-height: 75vh;
-      border-radius: 24px;
-      padding: 24px 10px;
+      height: 80vh; max-height: 80vh;
+      padding: 20px 24px;
       background-image:
         linear-gradient(rgba(79,140,255,0.025) 1px, transparent 1px),
         linear-gradient(90deg, rgba(79,140,255,0.025) 1px, transparent 1px);
@@ -644,7 +641,7 @@
       .opt-btn .letter { width: 26px; height: 26px; font-size: 0.65rem; }
       .opt-btn { font-size: 0.95rem; }
       .q-text { font-size: 1.3rem; }
-      #page-cover { width: 96vw; height: 80vh; max-height: 80vh; border-radius: 16px; padding: 16px 6px; }
+      #page-cover { height: 85vh; max-height: 85vh; padding: 14px 12px; }
       .scene-icon:nth-child(n+7) { display: none; }
       .cover-deco { gap: 6px; }
       .cover-deco.top .deco-icon:nth-child(n+7) { display: none; }
