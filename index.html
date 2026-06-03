@@ -512,15 +512,49 @@
     }
 
     /* ===== FINAL RESULT ===== */
-    #page-final { flex-direction: column; }
+    #page-final {
+      flex-direction: column;
+      position: relative;
+    }
+    .final-scene {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
+    }
     .final-inner {
+      position: relative; z-index: 1;
       width: 100%; max-width: 520px;
       display: flex; flex-direction: column; align-items: center;
       gap: 12px;
     }
-    .final- trophy {
-      font-size: clamp(3rem, 10vw, 5rem);
+
+    .final-trophy-wrap {
+      position: relative;
       animation: popBounce 0.6s 0.1s both;
+    }
+    .final-trophy-wrap .trophy-sparkle {
+      position: absolute; font-size: 1rem;
+      animation: sparklePop 1.5s ease-out infinite;
+      opacity: 0;
+    }
+    .final-trophy-wrap .trophy-sparkle:nth-child(1) { top: -8px; left: -20px; animation-delay: 0.3s; }
+    .final-trophy-wrap .trophy-sparkle:nth-child(2) { top: -15px; right: -10px; animation-delay: 0.7s; }
+    .final-trophy-wrap .trophy-sparkle:nth-child(3) { bottom: -5px; left: -15px; animation-delay: 1.1s; }
+    .final-trophy-wrap .trophy-sparkle:nth-child(4) { bottom: 0; right: -18px; animation-delay: 1.5s; }
+    @keyframes sparklePop {
+      0% { transform: scale(0) rotate(0deg); opacity: 0; }
+      20% { transform: scale(1.3) rotate(20deg); opacity: 1; }
+      80% { transform: scale(0.8) rotate(60deg); opacity: 0.6; }
+      100% { transform: scale(0) rotate(90deg); opacity: 0; }
+    }
+    .final-trophy {
+      font-size: clamp(3.2rem, 10vw, 5rem);
+      display: block;
+      animation: trophyFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 40px rgba(255,215,0,0.3));
+    }
+    @keyframes trophyFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
     .final-title {
       font-size: clamp(1.2rem, 3vw, 1.6rem);
@@ -531,37 +565,76 @@
     }
     .score-ring {
       position: relative;
-      width: clamp(120px, 25vw, 160px);
-      height: clamp(120px, 25vw, 160px);
+      width: clamp(130px, 26vw, 170px);
+      height: clamp(130px, 26vw, 170px);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       flex-direction: column;
       background: conic-gradient(#4f8cff var(--pct), rgba(255,255,255,0.06) 0%);
-      margin: 4px 0;
+      margin: 6px 0;
+      animation: scoreGlow 2.5s ease-in-out infinite;
     }
     .score-ring::before {
       content: ''; position: absolute;
       inset: 8px; border-radius: 50%;
       background: #060b1e;
     }
+    @keyframes scoreGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(79,140,255,0.15); }
+      50% { box-shadow: 0 0 40px rgba(79,140,255,0.3), 0 0 60px rgba(79,140,255,0.1); }
+    }
     .score-ring .num, .score-ring .pct { position: relative; z-index: 1; }
     .score-ring .num {
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-size: clamp(1.8rem, 4.5vw, 2.4rem);
       font-weight: 900;
     }
     .score-ring .pct {
-      font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+      font-size: clamp(0.75rem, 1.5vw, 0.9rem);
       color: rgba(255,255,255,0.4);
     }
     .final-message {
       font-size: clamp(1rem, 2.5vw, 1.3rem);
       font-weight: 700;
       text-align: center;
-      padding: 12px 20px;
-      border-radius: 12px;
+      padding: 14px 22px;
+      border-radius: 14px;
       background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
       color: rgba(255,255,255,0.85);
       line-height: 1.5;
+    }
+    .final-message .highlight {
+      color: #4f8cff;
+    }
+    .final-sifpi {
+      width: 100%; max-width: 440px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(79,140,255,0.08), rgba(0,212,255,0.05));
+      border: 1px solid rgba(79,140,255,0.15);
+      text-align: center;
+      font-size: clamp(0.8rem, 1.3vw, 0.9rem);
+      line-height: 1.5;
+      color: rgba(255,255,255,0.6);
+      animation: fadeSlideUp 0.6s 0.5s both;
+    }
+    .final-sifpi .link {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 6px 16px;
+      border-radius: 8px;
+      background: rgba(79,140,255,0.1);
+      border: 1px solid rgba(79,140,255,0.2);
+      color: #4f8cff;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.95em;
+      transition: all 0.2s ease;
+    }
+    .final-sifpi .link:hover {
+      background: rgba(79,140,255,0.2);
+      transform: scale(1.04);
+      box-shadow: 0 0 20px rgba(79,140,255,0.2);
     }
     .final-buttons {
       display: flex; gap: 12px; width: 100%; max-width: 400px;
@@ -645,6 +718,7 @@
       .cover-teaser { font-size: 0.8rem; }
       .btn-play { padding: 12px 36px; font-size: 0.95rem; }
       .final-buttons { flex-direction: column; gap: 6px; }
+      .final-sifpi { padding: 10px 12px; font-size: 0.78rem; }
       .result-inner { padding-top: 30px; }
       .result-insight-box .text { font-size: 0.95rem; }
       .result-insight-box .source { font-size: 0.95rem; }
@@ -751,14 +825,32 @@
 
   <!-- ===== FINAL RESULT ===== -->
   <div id="page-final" class="page">
+    <div class="final-scene">
+      <span class="scene-icon" style="--x:10%;--y:15%;--s:1;--d:0s;--dur:8s">🏗️</span>
+      <span class="scene-icon" style="--x:88%;--y:20%;--s:1.3;--d:0.8s;--dur:7s">🌉</span>
+      <span class="scene-icon" style="--x:8%;--y:70%;--s:1.1;--d:1.5s;--dur:9s">🚄</span>
+      <span class="scene-icon" style="--x:85%;--y:80%;--s:0.9;--d:2.2s;--dur:6s">🏙️</span>
+      <span class="scene-icon" style="--x:50%;--y:5%;--s:0.7;--d:1s;--dur:8s">🌆</span>
+      <span class="scene-icon" style="--x:50%;--y:95%;--s:0.8;--d:3s;--dur:7s">🏭</span>
+    </div>
     <div class="final-inner">
-      <div class="final- trophy" id="final-trophy">🏆</div>
+      <div class="final-trophy-wrap">
+        <span class="trophy-sparkle">✨</span>
+        <span class="trophy-sparkle">⭐</span>
+        <span class="trophy-sparkle">✨</span>
+        <span class="trophy-sparkle">⭐</span>
+        <span class="final-trophy" id="final-trophy">🏆</span>
+      </div>
       <div class="final-title">Quiz Selesai!</div>
       <div class="score-ring" id="score-ring">
         <span class="num" id="final-score-num">0/10</span>
         <span class="pct" id="final-score-pct">0%</span>
       </div>
       <div class="final-message" id="final-message"></div>
+      <div class="final-sifpi">
+        Kamu juga bisa cek <strong>Sistem Informasi Fasilitasi Proyek Infrastruktur (SIFPI)</strong> di sini ya:
+        <a class="link" href="https://sifpi.my.id" target="_blank" rel="noopener">🔗 sifpi.my.id</a>
+      </div>
       <div class="final-buttons">
         <button class="btn btn-home" onclick="goHome()">🏠 Beranda</button>
         <button class="btn btn-retry" onclick="restartQuiz()">🔄 Main Lagi</button>
@@ -1030,14 +1122,14 @@
       document.getElementById('final-score-pct').textContent = pct + '%';
 
       let trophy, msg;
-      if (pct === 100) { trophy = '🏆'; msg = 'Sempurna! Kamu benar-benar luar biasa! 🎉'; }
-      else if (pct >= 80) { trophy = '🌟'; msg = 'Kamu hebat! Pengetahuan yang mengesankan! 💪'; }
-      else if (pct >= 60) { trophy = '🔥'; msg = 'Kerja bagus! Terus tingkatkan! 📖'; }
-      else if (pct >= 40) { trophy = '📖'; msg = 'Belajar itu proses, kamu pasti bisa lebih baik! 🚀'; }
-      else { trophy = '💪'; msg = 'Tetap semangat! Cobain lagi untuk hasil yang lebih baik! 💡'; }
+      if (pct === 100) { trophy = '🏆'; msg = 'Sempurna! Kamu <span class="highlight">benar-benar luar biasa</span>! 🎉'; }
+      else if (pct >= 80) { trophy = '🌟'; msg = 'Kamu hebat! <span class="highlight">Pengetahuan yang mengesankan</span>! 💪'; }
+      else if (pct >= 60) { trophy = '🔥'; msg = 'Kerja bagus! <span class="highlight">Terus tingkatkan</span>! 📖'; }
+      else if (pct >= 40) { trophy = '📖'; msg = 'Belajar itu proses, <span class="highlight">kamu pasti bisa lebih baik</span>! 🚀'; }
+      else { trophy = '💪'; msg = 'Tetap semangat! <span class="highlight">Cobain lagi</span> untuk hasil yang lebih baik! 💡'; }
 
       document.getElementById('final-trophy').textContent = trophy;
-      document.getElementById('final-message').textContent = '“' + msg + '”';
+      document.getElementById('final-message').innerHTML = '“' + msg + '”';
 
       // Confetti
       spawnConfetti();
