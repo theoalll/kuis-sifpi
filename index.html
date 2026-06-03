@@ -62,105 +62,116 @@
 
 
     /* ===== COVER PAGE ===== */
-    #page-cover { flex-direction: column; text-align: center; gap: 8px; position: relative; }
+    #page-cover {
+      flex-direction: column; text-align: center;
+      position: relative; overflow: hidden;
+      gap: 0;
+      background-image:
+        linear-gradient(rgba(79,140,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,140,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
     #page-cover::before {
-      content: ''; position: absolute; inset: -50%; z-index: -1;
-      background: radial-gradient(circle at 50% 40%, rgba(79,140,255,0.08) 0%, transparent 60%);
-      animation: coverGlow 4s ease-in-out infinite alternate;
+      content: ''; position: absolute; inset: -50%; z-index: 0;
+      background: radial-gradient(circle at 50% 40%, rgba(79,140,255,0.1) 0%, transparent 60%);
+      animation: coverGlow 5s ease-in-out infinite alternate;
+    }
+    #page-cover::after {
+      content: ''; position: absolute; top: 0; left: -100%;
+      width: 60%; height: 100%; z-index: 0; pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(79,140,255,0.04), transparent);
+      transform: skewX(-20deg);
+      animation: lightSweep 8s ease-in-out infinite;
     }
     @keyframes coverGlow {
-      0% { transform: scale(1) translate(0, 0); opacity: 0.6; }
-      100% { transform: scale(1.1) translate(2%, -2%); opacity: 1; }
+      0% { transform: scale(1) translate(0, 0); opacity: 0.5; }
+      100% { transform: scale(1.15) translate(3%, -3%); opacity: 1; }
     }
-    .cover-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 5px 16px;
-      border-radius: 20px;
-      background: rgba(79,140,255,0.12);
-      border: 1px solid rgba(79,140,255,0.2);
-      color: #4f8cff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      animation: fadeSlideUp 0.6s 0.1s both;
+    @keyframes lightSweep {
+      0%, 100% { left: -100%; }
+      50% { left: 200%; }
     }
-    .cover-icon {
-      font-size: clamp(3rem, 8vw, 5rem);
-      display: block;
-      animation: floatIcon 3s ease-in-out infinite, fadeSlideUp 0.6s 0s both;
-      filter: drop-shadow(0 0 40px rgba(79,140,255,0.3));
+
+    /* Floating scene icons */
+    .cover-scene {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
     }
-    @keyframes floatIcon {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .scene-icon {
+      position: absolute;
+      font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+      opacity: 0.06;
+      left: var(--x, 50%); top: var(--y, 50%);
+      transform: scale(var(--s, 1));
+      animation: sceneFloat 6s ease-in-out infinite;
+      animation-delay: var(--d, 0s);
     }
+    .scene-icon:nth-child(even) { animation-duration: 8s; }
+    .scene-icon:nth-child(3n) { animation-duration: 10s; }
+    @keyframes sceneFloat {
+      0%, 100% { transform: scale(var(--s,1)) translateY(0); }
+      50% { transform: scale(var(--s,1)) translateY(-18px); }
+    }
+
+    /* Foreground body */
+    .cover-body {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 14px;
+      max-width: 720px; padding: 20px;
+    }
+
     .cover-title {
-      font-size: clamp(2rem, 6vw, 4rem);
+      font-size: clamp(2rem, 6.5vw, 4rem);
       font-weight: 900;
-      line-height: 1.1;
+      line-height: 1.15;
       background: linear-gradient(135deg, #4f8cff 0%, #00d4ff 40%, #9b5cfc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      filter: drop-shadow(0 0 40px rgba(79,140,255,0.3));
-      animation: fadeSlideUp 0.6s 0.12s both;
-      max-width: 700px;
-    }
-    .cover-title .sub {
-      display: block;
-      font-size: 0.4em;
-      -webkit-text-fill-color: rgba(255,255,255,0.45);
-      background: none;
-      font-weight: 500;
-      margin-top: 4px;
-      letter-spacing: 2px;
+      filter: drop-shadow(0 0 50px rgba(79,140,255,0.3));
+      animation: fadeSlideUp 0.6s 0.1s both;
+      max-width: 750px;
     }
     .cover-desc {
-      font-size: clamp(0.85rem, 1.4vw, 1rem);
-      color: rgba(255,255,255,0.45);
-      max-width: 440px;
-      line-height: 1.6;
-      animation: fadeSlideUp 0.6s 0.2s both;
-    }
-    .cover-features {
-      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-      animation: fadeSlideUp 0.6s 0.28s both;
-    }
-    .cover-feat {
-      display: flex; align-items: center; gap: 6px;
-      padding: 6px 14px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      font-size: 0.75rem;
+      font-size: clamp(0.9rem, 1.4vw, 1.05rem);
       color: rgba(255,255,255,0.5);
+      max-width: 520px;
+      line-height: 1.7;
+      animation: fadeSlideUp 0.6s 0.18s both;
     }
-    .cover-feat .icon { font-size: 0.9rem; }
+    .cover-teaser {
+      font-size: clamp(0.85rem, 1.3vw, 0.95rem);
+      color: #ffb347;
+      font-weight: 600;
+      text-align: center;
+      animation: fadeSlideUp 0.6s 0.26s both;
+    }
     .btn-play {
       position: relative;
-      padding: 14px 52px;
-      font-size: clamp(1rem, 2vw, 1.25rem);
+      padding: 18px 60px;
+      font-size: clamp(1.1rem, 2.2vw, 1.4rem);
       font-weight: 800;
       border: none;
-      border-radius: 16px;
+      border-radius: 20px;
       cursor: pointer;
       background: linear-gradient(135deg, #4f8cff, #00d4ff);
       color: #fff;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      box-shadow: 0 0 30px rgba(79,140,255,0.3), 0 8px 32px rgba(0,0,0,0.3);
+      box-shadow: 0 0 40px rgba(79,140,255,0.35), 0 8px 40px rgba(0,0,0,0.3);
       transition: all 0.3s ease;
-      animation: fadeSlideUp 0.6s 0.36s both, glowPulse 2s ease-in-out infinite;
+      animation: fadeSlideUp 0.6s 0.36s both, glowPulse 2.5s ease-in-out infinite;
+      margin-top: 6px;
     }
     .btn-play:hover {
-      transform: scale(1.06);
-      box-shadow: 0 0 50px rgba(79,140,255,0.5), 0 8px 32px rgba(0,0,0,0.3);
+      transform: scale(1.07);
+      box-shadow: 0 0 60px rgba(79,140,255,0.5), 0 0 100px rgba(0,212,255,0.15), 0 8px 40px rgba(0,0,0,0.3);
     }
-    .btn-play:active { transform: scale(0.97); }
+    .btn-play:active { transform: scale(0.96); }
     @keyframes glowPulse {
-      0%, 100% { box-shadow: 0 0 30px rgba(79,140,255,0.3), 0 8px 32px rgba(0,0,0,0.3); }
-      50% { box-shadow: 0 0 50px rgba(79,140,255,0.5), 0 0 80px rgba(0,212,255,0.2), 0 8px 32px rgba(0,0,0,0.3); }
+      0%, 100% { box-shadow: 0 0 40px rgba(79,140,255,0.35), 0 8px 40px rgba(0,0,0,0.3); }
+      50% { box-shadow: 0 0 65px rgba(79,140,255,0.55), 0 0 90px rgba(0,212,255,0.2), 0 8px 40px rgba(0,0,0,0.3); }
     }
     @keyframes fadeSlideUp {
       0% { opacity: 0; transform: translateY(24px); }
@@ -587,8 +598,10 @@
       .opt-btn .letter { width: 26px; height: 26px; font-size: 0.65rem; }
       .opt-btn { font-size: 0.95rem; }
       .q-text { font-size: 1.3rem; }
-      .cover-features { gap: 6px; }
-      .cover-feat { padding: 4px 10px; font-size: 0.65rem; }
+      .scene-icon:nth-child(n+5) { display: none; }
+      .cover-body { padding: 12px; gap: 10px; }
+      .cover-teaser { font-size: 0.8rem; }
+      .btn-play { padding: 14px 40px; font-size: 1rem; }
       .final-buttons { flex-direction: column; gap: 6px; }
       .result-inner { padding-top: 30px; }
       .result-insight-box .text { font-size: 0.95rem; }
@@ -602,23 +615,25 @@
 
   <!-- ===== COVER ===== -->
   <div id="page-cover" class="page active">
-    <span class="cover-badge">🎮 Quiz Interaktif</span>
-    <span class="cover-icon">🏗️</span>
-    <h1 class="cover-title">
-      Quiz Infrastruktur<br>Indonesia
-      <span class="sub">Uji Wawasan Investasi Infrastruktur Nusantara</span>
-    </h1>
-    <p class="cover-desc">
-      10 pertanyaan tentang IPFO, PPP, dan pembangunan infrastruktur Indonesia.
-      Buktikan pengetahuan Anda!
-    </p>
-    <div class="cover-features">
-      <span class="cover-feat"><span class="icon">📋</span> 10 Soal</span>
-      <span class="cover-feat"><span class="icon">⏱️</span> ~5 Menit</span>
-      <span class="cover-feat"><span class="icon">🏆</span> Skor Akhir</span>
-      <span class="cover-feat"><span class="icon">🔥</span> Streak</span>
+    <div class="cover-scene">
+      <span class="scene-icon" style="--x:12%;--y:12%;--s:1;--d:0s">🏗️</span>
+      <span class="scene-icon" style="--x:82%;--y:15%;--s:1.3;--d:0.6s">🌉</span>
+      <span class="scene-icon" style="--x:8%;--y:72%;--s:1.1;--d:1.2s">🚄</span>
+      <span class="scene-icon" style="--x:78%;--y:78%;--s:0.9;--d:2s">🏙️</span>
+      <span class="scene-icon" style="--x:88%;--y:48%;--s:0.8;--d:2.8s">🚢</span>
+      <span class="scene-icon" style="--x:18%;--y:48%;--s:1;--d:0.9s">🏗️</span>
+      <span class="scene-icon" style="--x:50%;--y:6%;--s:0.7;--d:1.8s">🌆</span>
     </div>
-    <button class="btn-play" onclick="startQuiz()">Mulai Quiz</button>
+    <div class="cover-body">
+      <h1 class="cover-title">
+        Seberapa Paham Kamu<br>Tentang Infrastruktur Indonesia?
+      </h1>
+      <p class="cover-desc">
+        Dari proyek strategis nasional hingga skema investasi modern. Uji wawasanmu dalam 10 pertanyaan singkat dan lihat seberapa jauh kamu memahami pembangunan Nusantara.
+      </p>
+      <p class="cover-teaser">Hanya sedikit peserta yang bisa menjawab semuanya dengan benar.</p>
+      <button class="btn-play" onclick="startQuiz()">🚀 Mulai Tantangan</button>
+    </div>
   </div>
 
   <!-- ===== QUESTION ===== -->
